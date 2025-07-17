@@ -25,21 +25,7 @@ ChartJS.register(
   LineElement
 );
 
-interface Ticket {
-  id: string;
-  title: string;
-  description: string;
-  solution: string;
-  technician: string;
-  sector: string;
-  user: string;
-  status: string;
-  category: string;
-  priority: string;
-  dateTime: string;
-  createdAt: string;
-  resolvedAt?: string;
-}
+import { Ticket } from '../services/supabase';
 
 interface ChartsProps {
   tickets: Ticket[];
@@ -91,7 +77,7 @@ export const DashboardCharts: React.FC<ChartsProps> = ({ tickets }) => {
 
   // Dados para gráfico de linha - Chamados por mês
   const monthlyData = tickets.reduce((acc, ticket) => {
-    const date = new Date(ticket.dateTime);
+    const date = new Date(ticket.date_time);
     const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
     acc[monthYear] = (acc[monthYear] || 0) + 1;
     return acc;

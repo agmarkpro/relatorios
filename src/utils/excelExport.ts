@@ -1,20 +1,6 @@
 import * as XLSX from 'xlsx';
 
-interface Ticket {
-  id: string;
-  title: string;
-  description: string;
-  solution: string;
-  technician: string;
-  sector: string;
-  user: string;
-  status: string;
-  category: string;
-  priority: string;
-  dateTime: string;
-  createdAt: string;
-  resolvedAt?: string;
-}
+import { Ticket } from '../services/supabase';
 
 interface ExportOptions {
   startMonth: number;
@@ -26,7 +12,7 @@ interface ExportOptions {
 export const exportToExcel = (tickets: Ticket[], options: ExportOptions) => {
   // Filtrar tickets pelo período selecionado
   const filteredTickets = tickets.filter(ticket => {
-    const ticketDate = new Date(ticket.dateTime);
+    const ticketDate = new Date(ticket.date_time);
     const ticketMonth = ticketDate.getMonth() + 1;
     const ticketYear = ticketDate.getFullYear();
     
@@ -47,11 +33,11 @@ export const exportToExcel = (tickets: Ticket[], options: ExportOptions) => {
     'Título': ticket.title,
     'Técnico': ticket.technician,
     'Setor': ticket.sector,
-    'Usuário': ticket.user,
+    'Usuário': ticket.user_name,
     'Status': ticket.status,
     'Categoria': ticket.category,
     'Prioridade': ticket.priority,
-    'Data/Hora': new Date(ticket.dateTime).toLocaleString('pt-BR'),
+    'Data/Hora': new Date(ticket.date_time).toLocaleString('pt-BR'),
     'Descrição': ticket.description,
     'Solução': ticket.solution
   }));
@@ -92,7 +78,7 @@ export const exportToExcel = (tickets: Ticket[], options: ExportOptions) => {
 export const saveMonthlyBackup = (tickets: Ticket[], month: number, year: number) => {
   // Filtrar tickets do mês específico
   const monthlyTickets = tickets.filter(ticket => {
-    const ticketDate = new Date(ticket.dateTime);
+    const ticketDate = new Date(ticket.date_time);
     return ticketDate.getMonth() + 1 === month && ticketDate.getFullYear() === year;
   });
 
@@ -104,11 +90,11 @@ export const saveMonthlyBackup = (tickets: Ticket[], month: number, year: number
     'Título': ticket.title,
     'Técnico': ticket.technician,
     'Setor': ticket.sector,
-    'Usuário': ticket.user,
+    'Usuário': ticket.user_name,
     'Status': ticket.status,
     'Categoria': ticket.category,
     'Prioridade': ticket.priority,
-    'Data/Hora': new Date(ticket.dateTime).toLocaleString('pt-BR'),
+    'Data/Hora': new Date(ticket.date_time).toLocaleString('pt-BR'),
     'Descrição': ticket.description,
     'Solução': ticket.solution
   }));
